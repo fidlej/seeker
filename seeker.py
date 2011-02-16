@@ -67,7 +67,7 @@ def main():
     end = time.time()
 
     duration = end - start
-    print "%s/%s = %s seeks/second" % (
+    print "%s/%.2f = %s seeks/second" % (
             num_seeks, duration, int(num_seeks/float(duration)))
     print "%.2f ms random access time" % (1000 * duration/float(num_seeks))
 
