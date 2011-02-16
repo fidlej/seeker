@@ -58,7 +58,7 @@ def main():
     filename = args[0]
     dev = open(filename)
     size = _get_size(dev)
-    print "Benchmarking %s [%s MB]" % (filename, size//2**20)
+    print "Benchmarking %s [%.2f GB]" % (filename, size/float(2**30))
 
     random.seed()
     num_seeks = 10000

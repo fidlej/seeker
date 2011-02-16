@@ -9,12 +9,12 @@ sudo ./seeker.py /dev/sda
 Example Results
 ===============
 SSD results:
-    Benchmarking /dev/sda [152627 MB]
+    Benchmarking /dev/sda [149.05 GB]
     10000/2.42 = 4124 seeks/second
     0.24 ms random access time
 
 HDD results:
-    Benchmarking /dev/da0 [70007 MB]
+    Benchmarking /dev/da0 [68.37 GB]
     10000/60.26 = 165 seeks/second
     6.03 ms random access time
 
