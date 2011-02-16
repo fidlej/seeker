@@ -2,6 +2,9 @@
 """Usage: seeker.py /path/to/raw/device
 Measures the possible number of seeks per seconds.
 """
+# It should work on any Unix.
+# It is based on the Linux specific seeker.c from:
+# http://www.linuxinsight.com/how_fast_is_your_disk.html
 
 import os
 import sys
@@ -12,7 +15,29 @@ BLOCKSIZE = 512
 
 def _get_size(input):
     input.seek(0, os.SEEK_END)
-    return input.tell()
+    size = input.tell()
+    if size != 0:
+        return size
+
+    # FreeBSD does not support SEEK_END on devices.
+    # We need to get the size by binary halving.
+    pos = 0
+    step = 2**40  # 1TB
+    while True:
+        pos += step
+        try:
+            input.seek(pos)
+            data = input.read(1)
+        except IOError, possible:
+            data = ""
+
+        if len(data) != 1:
+            if step == 1:
+                # Size is the possible position + 1.
+                return (pos - step) + 1
+
+            pos -= step
+            step = max(1, step // 2)
 
 
 def _seek_randomly(dev, size, num_seeks):
@@ -20,7 +45,8 @@ def _seek_randomly(dev, size, num_seeks):
     for i in xrange(num_seeks):
         block = random.randrange(num_blocks)
         dev.seek(block * BLOCKSIZE)
-        dev.read(BLOCKSIZE)
+        data = dev.read(BLOCKSIZE)
+        assert len(data) == BLOCKSIZE
 
 
 def main():
