@@ -1,6 +1,7 @@
 seeker
 ======
 A portable disk seek benchmark.
+It does random reads from a disk device or a very big file.
 
 Usage:
 sudo ./seeker.py /dev/sda
