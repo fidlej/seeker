@@ -49,6 +49,17 @@ def _seek_randomly(dev, size, num_seeks):
         assert len(data) == BLOCKSIZE
 
 
+def _benchmark_seek(dev, size, num_seeks):
+    start = time.time()
+    _seek_randomly(dev, size, num_seeks)
+    end = time.time()
+
+    duration = end - start
+    print "%s/%.2f = %s seeks/second" % (
+            num_seeks, duration, int(num_seeks/float(duration)))
+    print "%.2f ms random access time" % (1000 * duration/float(num_seeks))
+
+
 def main():
     args = sys.argv[1:]
     if len(args) != 1:
@@ -58,18 +69,18 @@ def main():
     filename = args[0]
     dev = open(filename)
     size = _get_size(dev)
+    if size < BLOCKSIZE:
+        print >>sys.stderr, (
+                "too small file: %s bytes" % size)
+        sys.exit(1)
+
     print "Benchmarking %s [%.2f GB]" % (filename, size/float(2**30))
 
     random.seed()
-    num_seeks = 10000
-    start = time.time()
-    _seek_randomly(dev, size, num_seeks)
-    end = time.time()
-
-    duration = end - start
-    print "%s/%.2f = %s seeks/second" % (
-            num_seeks, duration, int(num_seeks/float(duration)))
-    print "%.2f ms random access time" % (1000 * duration/float(num_seeks))
+    base = 10
+    for power in xrange(1, 6):
+        num_seeks = base**power
+        _benchmark_seek(dev, size, num_seeks)
 
 
 if __name__ == "__main__":
