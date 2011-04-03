@@ -55,8 +55,13 @@ def _benchmark_seek(dev, size, num_seeks):
     end = time.time()
 
     duration = end - start
+    if duration > 0:
+        rate = int(num_seeks/float(duration))
+    else:
+        rate = float("inf")
+
     print "%s/%.2f = %s seeks/second" % (
-            num_seeks, duration, int(num_seeks/float(duration)))
+            num_seeks, duration, rate)
     print "%.2f ms random access time" % (1000 * duration/float(num_seeks))
 
 
