@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Usage: seeker.py /path/to/raw/device
-Measures the possible number of seeks per seconds.
+Measures the possible number of seeks per second.
 """
 # It should work on any Unix.
 # It is based on the Linux specific seeker.c from:
