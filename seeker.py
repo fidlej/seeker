@@ -12,9 +12,10 @@ import time
 import random
 
 BLOCKSIZE = 512
+SEEK_END = 2
 
 def _get_size(input):
-    input.seek(0, os.SEEK_END)
+    input.seek(0, SEEK_END)
     size = input.tell()
     if size != 0:
         return size
